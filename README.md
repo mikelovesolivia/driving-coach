@@ -100,6 +100,7 @@ Here is a good tutorial for reference: [Football Player Tracking](https://www.yo
 5. **Evaluation**:
    - Use metrics like mAP (mean Average Precision) for object detection.
    - Use MOTA (Multiple Object Tracking Accuracy) for tracking performance.
+   - Evaluate the model performance on the test set.
   
 6. **Application Development**:
    - Build the frontend for users to interact, like uploading videos and see the tracking results, using HTML, CSS and JavaScript. Use React to improve the interaction and beautify the interface.
