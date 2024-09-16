@@ -26,7 +26,7 @@ Possible solutions may be found from computer vision tasks related to image segm
    - **Description**: A real-time object detection system that can detect multiple objects in an image with high speed and accuracy.
    - **Versions**: YOLOv3, YOLOv4, YOLOv5, YOLOv7, YOLOv8.
    - **Use Case**: Suitable for real-time applications like dashcam video analysis.
-   - **Resources**: [YOLOv5 GitHub](https://github.com/ultralytics/yolov5), [YOLOv4 Paper](https://arxiv.org/abs/2004.10934) [YOLOv8 GitHub](https://github.com/ultralytics/ultralytics)
+   - **Resources**: [YOLOv5 GitHub](https://github.com/ultralytics/yolov5), [YOLOv4 Paper](https://arxiv.org/abs/2004.10934), [YOLOv8 GitHub](https://github.com/ultralytics/ultralytics)
 
 2. **SSD (Single Shot MultiBox Detector)**
    - **Description**: A fast object detection algorithm that uses a single deep neural network to detect objects in images.
