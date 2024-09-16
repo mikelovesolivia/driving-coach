@@ -78,7 +78,7 @@ Possible solutions may be found from computer vision tasks related to image segm
 
 To ensure a correct and effective implementation, we will place priority to methods that are open-source and have widespread practical use, like YOLO, Deep Sort and Byte Track. We will implement based on their code released on GitHub, and innovatively integrate them with other methods and our ideas to further improve the effectiveness. 
 
-Here is a good tutorial for reference: [Football Player Tracking](https://www.youtube.com/watch?v=QCG8QMhga9k)
+Here is a good tutorial for reference: [Football Player Tracking](https://www.youtube.com/watch?v=QCG8QMhga9k).
 
 ## Implementation Workflow
 1. **Preprocessing**:
@@ -101,6 +101,6 @@ Here is a good tutorial for reference: [Football Player Tracking](https://www.yo
    - Use metrics like mAP (mean Average Precision) for object detection.
    - Use MOTA (Multiple Object Tracking Accuracy) for tracking performance.
   
-6. **Application Development**
+6. **Application Development**:
    - Build the frontend for users to interact, like uploading videos and see the tracking results, using HTML, CSS and JavaScript. Use React to improve the interaction and beautify the interface.
    - Build the backend for deploying our trained model to analyze the uploaded videos using Flask.
