@@ -5,18 +5,45 @@ CSE 60535 Computer Vision Course Project, University of Notre Dame
 Create an application that analyzes dashcam videos and identifies and tracks objects relevant to the driver, like cars, lanes, signs, etc. The software will be able to detect/track multiple objects at a time, on a stream of video.
 
 ## Dataset
-Here is a list of the recommended datasets from the instructor:
-- [KITTI](https://www.cvlibs.net/datasets/kitti/) (images)
-- [KITTI Road](https://www.cvlibs.net/datasets/kitti/eval_road.php) (images)
-- [YouTube 8M](https://research.google.com/youtube8m/) (videos)
+Datasets to be used for the project
+- [KITTI Multi-object Tracking](https://www.cvlibs.net/datasets/kitti/eval_tracking.php) (images) for vihecle tracking
+- [KITTI Road](https://www.cvlibs.net/datasets/kitti/eval_road.php) for lane detection
 
-Additional datasets that may be helpful:
-- [nuScenes by Motional](https://www.nuscenes.org/) (images)
-- [BDD100K](https://www.vis.xyz/bdd100k/) (videos, images)
-- [Waymo](https://waymo.com/open/) (images)
-- [A2D2](https://www.a2d2.audi/a2d2/en.html) (images)
-- [Cityscapes](https://www.cityscapes-dataset.com/) (videos, images)
+### Differences between Training and Validation Datasets
 
+ - KITTI Multi-object Tracking
+   - Training: Images + Object Information (bounding box, location, size, class, etc.)
+   - Validation: Images Only
+
+ - KIITI Road
+   - Training: Images + Lane Segmentations (two types: road - the road area, i.e, the composition of all lanes, and lane - the ego-lane, i.e., the lane the vehicle is currently driving on)
+   - Validation: Images Only
+
+### Dataset Details
+
+ - KITTI Multi-object Tracking
+   - 21 training sequences and 29 test sequences
+   - Resolution: 1242 $\times$ 375
+   - Labeled 8 different classes: DontCare, Car, Van, Pedestrian, Truck, Cyclist, Person sitting, Tram (focusing on Car and Pedestrian only)
+   - Miscs: The labeling process was done in two steps: First, annotators labeled 3D bounding boxes as tracklets in point clouds. Since a single 3D bounding box often poorly fits pedestrian tracklets, the left/right boundaries of each object were labeled using Mechanical Turk. Additionally, the object's occlusion state was labeled, and truncation was computed by backprojecting a car/pedestrian model into the image plane.
+
+ - KITTI Road
+   - 289 training and 290 test images
+   - Resolution: 1242 $\times$ 375
+   - Categories:
+     - uu - urban unmarked (98/100)
+     - um - urban marked (95/96)
+     - umm - urban multiple marked lanes (96/94)
+     - urban - combination of the three above
+    
+### Setup Details
+ - 1 Inertial Navigation System (GPS/IMU): OXTS RT 3003
+ - 1 Laserscanner: Velodyne HDL-64E
+ - 2 Grayscale cameras, 1.4 Megapixels: Point Grey Flea 2 (FL2-14S3M-C)
+ - 2 Color cameras, 1.4 Megapixels: Point Grey Flea 2 (FL2-14S3C-C)
+ - 4 Varifocal lenses, 4-8 mm: Edmund Optics NT59-917
+ - Laser scanner spinning speed: 10 fps (capturing approximately 100k points per cycle)
+ - Vertical resolution of the laser scanner: 64
 
 ## Method
 Possible solutions may be found from computer vision tasks related to image segmentation, object detection and object tracking.
