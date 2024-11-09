@@ -132,3 +132,34 @@ Here is a good tutorial for reference: [Football Player Tracking](https://www.yo
 6. **Application Development**:
    - Build the frontend for users to interact, like uploading videos and see the tracking results, using HTML, CSS and JavaScript. Use React to improve the interaction and beautify the interface.
    - Build the backend for deploying our trained model to analyze the uploaded videos using Flask.
+
+
+## Report
+
+In this first update, I implemented the road detection on KITTI Road dataset. The following methods are employed:
+
+- Preprocessing: RGB to gray, image cropping
+- Gaussian Blurring: to reduce the noise and unimportant details;
+- Canny Edge Detection: to detect the edges of the image, where the road is included;
+- Hough Transform: to detect lines related to the road from the edges;
+- Convex Hull: to identify the boundaries of detected lines and combine them to form the road segmentation;
+- Intersection over Union (IoU): to evaluate the effectiveness of the detection result quantitatively, $ IoU = |GT \cap Prediction|/|GT \cup Prediction| $
+
+Here is a detailed description of the method. First, a random KITTI Road image was selected and transformed to gray image. Then, as a preprocessing step, Gaussian blurring was applied to remove the high-frequency noise incurred by varying lighting and shades and surrounding objects like trees, and reduce the harshness of edges so that only prominent edges will be detected. Afterwards, I conducted Canny edge detection on the preprocessed image. Since roads often have distinct and clear boundaries, edge detection helps to find the sharp and clean edges that contribute to the finding of road boundaries. Next, the edge image was cropped so that only the lower part was kept, where roads typically occur. This prior knowledge further removes the unnecessary interference items and noises In this first update, I implemented the road detection on KITTI Road dataset. The following methods are employed:
+
+- Preprocessing: RGB to gray, image cropping
+- Gaussian Blurring: to reduce the noise and unimportant details;
+- Canny Edge Detection: to detect the edges of the image, where the road is included;
+- Hough Transform: to detect lines related to the road from the edges;
+- Convex Hull: to identify the boundaries of detected lines and combine them to form the road segmentation;
+- Intersection over Union (IoU): to evaluate the effectiveness of the detection result quantitatively.
+
+Here is a detailed description of the pipeline: 
+1. A random KITTI Road image was selected and transformed to gray image. 
+2. As a preprocessing step, Gaussian blurring was applied to remove the high-frequency noise incurred by varying lighting and shades and surrounding objects like trees, and reduce the harshness of edges so that only prominent edges will be detected.
+3. Conducted Canny edge detection on the preprocessed image. Since roads often have distinct and clear boundaries, edge detection helps to find the sharp and clean edges that contribute to the finding of road boundaries. 
+4. The edge image was cropped so that only the lower part (a polygon) was kept, where roads typically occur. This prior knowledge further removes the unnecessary interference items and noises, simplifying the complexity and enabling the model to focus on the road in the next step.
+5. Implemented Hough Transform to find the road, since the boundaries are normally a series of lines. Since the image has been cropped, the edge of the cropping may also be identified as lines. Therefore, a buffer length was set to filter the lines close to the boundaries, avoiding the misdetection. The end points of line segments were stored for further processing.
+6. A convex hull of the collected end points was computed. This helps to form a closed polygon to cover the whole road area, i.e. the final road detection result.
+7. Alpha blending was used to overlay the road detection result onto the original image for better visualization and evaluation.
+8. For a more reasonable quantitative evaluation, the IoU between the ground truth and the prediction was computed: $ IoU = |GT \cap Prediction|/|GT \cup Prediction| $.
