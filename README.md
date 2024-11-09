@@ -143,15 +143,6 @@ In this first update, I implemented the road detection on KITTI Road dataset. Th
 - Canny Edge Detection: to detect the edges of the image, where the road is included;
 - Hough Transform: to detect lines related to the road from the edges;
 - Convex Hull: to identify the boundaries of detected lines and combine them to form the road segmentation;
-- Intersection over Union (IoU): to evaluate the effectiveness of the detection result quantitatively, $ IoU = |GT \cap Prediction|/|GT \cup Prediction| $
-
-Here is a detailed description of the method. First, a random KITTI Road image was selected and transformed to gray image. Then, as a preprocessing step, Gaussian blurring was applied to remove the high-frequency noise incurred by varying lighting and shades and surrounding objects like trees, and reduce the harshness of edges so that only prominent edges will be detected. Afterwards, I conducted Canny edge detection on the preprocessed image. Since roads often have distinct and clear boundaries, edge detection helps to find the sharp and clean edges that contribute to the finding of road boundaries. Next, the edge image was cropped so that only the lower part was kept, where roads typically occur. This prior knowledge further removes the unnecessary interference items and noises In this first update, I implemented the road detection on KITTI Road dataset. The following methods are employed:
-
-- Preprocessing: RGB to gray, image cropping
-- Gaussian Blurring: to reduce the noise and unimportant details;
-- Canny Edge Detection: to detect the edges of the image, where the road is included;
-- Hough Transform: to detect lines related to the road from the edges;
-- Convex Hull: to identify the boundaries of detected lines and combine them to form the road segmentation;
 - Intersection over Union (IoU): to evaluate the effectiveness of the detection result quantitatively.
 
 Here is a detailed description of the pipeline: 
