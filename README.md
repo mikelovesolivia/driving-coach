@@ -162,4 +162,4 @@ Here is a detailed description of the pipeline:
 5. Implemented Hough Transform to find the road, since the boundaries are normally a series of lines. Since the image has been cropped, the edge of the cropping may also be identified as lines. Therefore, a buffer length was set to filter the lines close to the boundaries, avoiding the misdetection. The end points of line segments were stored for further processing.
 6. A convex hull of the collected end points was computed. This helps to form a closed polygon to cover the whole road area, i.e. the final road detection result.
 7. Alpha blending was used to overlay the road detection result onto the original image for better visualization and evaluation.
-8. For a more reasonable quantitative evaluation, the IoU between the ground truth and the prediction was computed: $ IoU = |GT \cap Prediction|/|GT \cup Prediction| $.
+8. For a more reasonable quantitative evaluation, the IoU between the ground truth and the prediction was computed: $IoU = |GT \cap Prediction|/|GT \cup Prediction|$ .
