@@ -166,6 +166,7 @@ Here is a detailed description of the pipeline:
 ##### Quantitative Evaluation
 $IoU = 0.6978$
 
+
 #### How to use
 
 The code for the first update is available in "project.ipynb". You can see the results I get in my implementation by directly going through the file. Besides, to replicate the result, you can do the following:
@@ -177,7 +178,27 @@ The code for the first update is available in "project.ipynb". You can see the r
 2. Download the KITTI Road Dataset from [https://www.cvlibs.net/datasets/kitti/eval_road.php](https://www.cvlibs.net/datasets/kitti/eval_road.php), create a new folder named "dataset" and place the downloaded folder in "dataset" folder. You are also free to customize the dataset by editing the image path from code block 2 to 4.
 3. Go to "project.ipynb" and run the code.
 
-#### Next Step
-1. Further improve the road detection result by integrating some new features.
-2. Detect and track objects like vehicles or pedestrians in each frame. Methods to be used and integrated include SIFT, optical flow and neural networks like YOLO.
-3. Test the model on a complete video containing all frames and build an interface displaying the result.
+### Second Update
+
+#### U-Net for Lane Segmentation
+
+To detect lanes from the images, I implemented a U-Net and trained it with image and mask pairs from the training dataset. After that, I tested the model on the test dataset and compared it with a predefined model from torchvision.models.
+
+The structure of the U-Net model is shown in the following image:
+
+![image](https://github.com/user-attachments/assets/f1e613ad-cdc6-4888-ba99-c4a30bfcd848)
+
+First, each input image is resized to $256 \times 512$ to be in the same dimension. Then each pixel value of the image is divided by 255 and normalized to $[0, 1]$. Afterwards, the image is noramlized by $\mu=[0.485, 0.456, 0.406], \sigma=[0.229, 0.224, 0.225]$ for each channel and input into the U-Net model. The U-Net model consists of several convolutional blocks, transposed convolution layers, max pooling layers, skip connections and concatenations. The convolutional block consistss of a convolutional layer that preserves the input size, a batch norm layer and a ReLU activation function. The max pooling layer downsamples the feature maps by 2. Finally, the model outputs a segmentation map of the lanes. For optimization, I binarized the ground truth segmentation map, computed the binary cross entropy loss 
+
+$\text{BCE Loss} = -\frac{1}{N} \sum_{i=1}^{N} \left( y_i \cdot \log(\hat{y}_i) + (1 - y_i) \cdot \log(1 - \hat{y}_i) \right)$
+
+and optimized the model with Adam optimizer.
+
+The U-Net is used in this segmentation task because:
+- High-resolution features from the contracting path are combined with the upsampled output in the expansive path, enhancing localization. A successive convolutional layer refines this information to assemble a more precise segmentation output.
+- The large number of feature channels in the upsampling part enables the network to effectively propagate context information to higher-resolution layers, ensuring detailed and contextually accurate segmentation.
+- The symmetrical architecture facilitates the seamless integration of low-level spatial information from the contracting path with high-level semantic information from deeper layers, resulting in a balanced and comprehensive feature representation.
+- Skip connections between corresponding layers in the contracting and expansive paths preserve fine-grained details and help mitigate the loss of spatial resolution during downsampling.
+- The multi-scale processing capability of U-Net allows it to capture both global context and local details, making it robust for segmenting objects of varying sizes.
+
+After 200 epochs of training, the imag
