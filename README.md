@@ -236,7 +236,7 @@ And the AUC and PR Curves are plotted in the figures below:
 
 ![image](https://github.com/user-attachments/assets/fccb0732-3162-49d0-b229-d4191770fb15)
 
-Which indicates that the model fits the training data very well.
+Which indicates that the model fits the training data well.
 
 Below are some selected segmentation results:
 
@@ -260,7 +260,7 @@ Below are some selected segmentation results:
 
 ![image](https://github.com/user-attachments/assets/01ece719-4ff0-44ce-9b5e-432b4c5bcc02)
 
-And this [video](https://github.com/mikelovesolivia/driving-coach/blob/main/resources/test_results.mp4) demonstrates all results on the test dataset. Most test results make sense.
+And this [video](https://github.com/mikelovesolivia/driving-coach/blob/main/resources/test_results.mp4) demonstrates all results on the test dataset. Most test results make sense. Some cases are not perfectly well due to light conditions and shades.
 
 Even though the test results mostly seem to be good, I also apply the model to a [video](https://github.com/mikelovesolivia/driving-coach/blob/main/resources/straight_lane_detected.avi), which turns out not to work very well. This may attribute to that the aspect ratios (height/width) of the video and training images vary greatly, and I simply apply the resize for the input to be processed by the model. A cropping operation may be better.
 
@@ -273,3 +273,4 @@ Therefore, the followings may be applied to the U-Net architecture for better pe
 - Introduce multi-scale context by adding ASPP or atrous convolutions for better multi-scale feature extraction.
 - Preserve spatial resolution by replacing aggressive downsampling with atrous convolutions.
 - Incorporate global context and use image-level features to improve robustness in complex scenarios.
+   Apply brightness, contrast, and gamma corrections during training to make the model robust to different light conditions.
