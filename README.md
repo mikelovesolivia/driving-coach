@@ -262,7 +262,7 @@ Below are some selected segmentation results:
 
 And this [video](https://github.com/mikelovesolivia/driving-coach/blob/main/resources/test_results.mp4) demonstrates all results on the test dataset. Most test results make sense.
 
-Even though the test results mostly seem to be good, I also apply the model to a [video](https://github.com/mikelovesolivia/driving-coach/blob/main/resources/straight_lane_detected.avi), which turns out not to work very well. This may attribute to that the aspect rations (height/width) of the video and training images vary greatly, and I simply apply the resize for the input to be processed by the model. A cropping operation may be better.
+Even though the test results mostly seem to be good, I also apply the model to a [video](https://github.com/mikelovesolivia/driving-coach/blob/main/resources/straight_lane_detected.avi), which turns out not to work very well. This may attribute to that the aspect ratios (height/width) of the video and training images vary greatly, and I simply apply the resize for the input to be processed by the model. A cropping operation may be better.
 
 To compare, I also test the deeplabv3_resnet50 model imported from torchvision.models, and it turns out to work better on the test video. It may arise from its unique structure design:
 - Multi-scale Context Aggregation: Atrous convolutions and ASPP enable efficient capture of global and local features for lanes of varying shapes and sizes.
