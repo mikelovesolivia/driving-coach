@@ -273,4 +273,4 @@ Therefore, the followings may be applied to the U-Net architecture for better pe
 - Introduce multi-scale context by adding ASPP or atrous convolutions for better multi-scale feature extraction.
 - Preserve spatial resolution by replacing aggressive downsampling with atrous convolutions.
 - Incorporate global context and use image-level features to improve robustness in complex scenarios.
-   Apply brightness, contrast, and gamma corrections during training to make the model robust to different light conditions.
+- Apply brightness, contrast, and gamma corrections during training to make the model robust to different light conditions.
