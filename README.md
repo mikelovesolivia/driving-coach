@@ -201,4 +201,4 @@ The U-Net is used in this segmentation task because:
 - Skip connections between corresponding layers in the contracting and expansive paths preserve fine-grained details and help mitigate the loss of spatial resolution during downsampling.
 - The multi-scale processing capability of U-Net allows it to capture both global context and local details, making it robust for segmenting objects of varying sizes.
 
-After 200 epochs of training, the imag
+After 200 epochs of training, the 
