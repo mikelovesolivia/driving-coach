@@ -182,7 +182,7 @@ The code for the first update is available in "project.ipynb". You can see the r
 
 #### U-Net for Lane Segmentation
 
-To detect lanes from the images, I implemented a U-Net and trained it with image and mask pairs from the training dataset. After that, I tested the model on the test dataset and compared it with a predefined model from torchvision.models.
+To detect lanes from the images, I implemented a U-Net and trained it with image and mask pairs from the training dataset.
 
 The structure of the U-Net model is shown in the following image:
 
@@ -192,7 +192,7 @@ First, each input image is resized to $256 \times 512$ to be in the same dimensi
 
 $\text{BCE Loss} = -\frac{1}{N} \sum_{i=1}^{N} \left( y_i \cdot \log(\hat{y}_i) + (1 - y_i) \cdot \log(1 - \hat{y}_i) \right)$
 
-and optimized the model with Adam optimizer.
+and optimized the model with Adam optimizer. Learning rate is set to $10^{-4}$.
 
 The U-Net is used in this segmentation task because:
 - High-resolution features from the contracting path are combined with the upsampled output in the expansive path, enhancing localization. A successive convolutional layer refines this information to assemble a more precise segmentation output.
@@ -201,4 +201,75 @@ The U-Net is used in this segmentation task because:
 - Skip connections between corresponding layers in the contracting and expansive paths preserve fine-grained details and help mitigate the loss of spatial resolution during downsampling.
 - The multi-scale processing capability of U-Net allows it to capture both global context and local details, making it robust for segmenting objects of varying sizes.
 
-After 200 epochs of training, the 
+After 200 epochs of training, three evaluation metrics (on training set only since the test set does not contain ground truth segmentation masks) are selected: 
+
+- **Dice Coefficient**:
+  - The Dice Coefficient measures the overlap between the predicted lane pixels and the ground truth lane pixels.
+  - Dice prioritizes the overlap between the predicted and actual lane pixels, which is crucial for ensuring that the detected lanes align accurately with the true lane boundaries.
+  - $\text{Dice Coefficient} = \frac{2 \cdot |P \cap G|}{|P| + |G|}$
+
+- **IoU**:
+  - The IoU measures the ratio of the intersection area to the union area between the predicted and ground truth masks.
+  - IoU ensures that the predicted lanes do not include irrelevant regions, as it penalizes both false positives (extra regions that are misclassified) and false negatives (missed lane regions).
+  - $\text{IoU} = \frac{|P \cap G|}{|P \cup G|}$
+ 
+- **Pixel Accuracy**:
+  - The Pixel Accuracy calculates the proportion of correctly classified pixels (both lane and non-lane) to the total number of pixels.
+  - Pixel accuracy provides a general measure of how well the model distinguishes between lane and non-lane pixels.
+  - $\text{Pixel Accuracy} = \frac{\text{Number of Correctly Classified Pixels}}{\text{Total Number of Pixels}}$
+
+
+
+Evaluation metrics are displayed in the table below:
+
+| Metric                     | Value   |
+|----------------------------|---------|
+| Average Dice Coefficient   | 0.9990  |
+| Average IoU                | 0.9980  |
+| Average Pixel Accuracy     | 0.9998  |
+
+
+
+And the AUC and PR Curves are plotted in the figures below:
+
+![image](https://github.com/user-attachments/assets/e85c15b1-4c34-406f-9d8f-cb4dd9d17d84)
+
+![image](https://github.com/user-attachments/assets/fccb0732-3162-49d0-b229-d4191770fb15)
+
+Which indicates that the model fits the training data very well.
+
+Below are some selected segmentation results:
+
+##### Training set
+![image](https://github.com/user-attachments/assets/d8216767-3264-4415-a957-00e445d92d74)
+
+![image](https://github.com/user-attachments/assets/ca2fd6d5-81fd-4fbe-bba9-309a5a872e7b)
+
+![image](https://github.com/user-attachments/assets/0440074b-82c2-4257-b594-45a9c5144644)
+
+![image](https://github.com/user-attachments/assets/9cc82f41-5763-42a1-948a-e7428051f3af)
+
+##### Test set
+![image](https://github.com/user-attachments/assets/9f4d1f8e-adf8-486a-abe2-97323138cb4d)
+
+![image](https://github.com/user-attachments/assets/899f0243-4da0-44e8-8136-5eb12715dfae)
+
+![image](https://github.com/user-attachments/assets/e69741b4-d051-41ad-8572-d40ef0dbf47f)
+
+![image](https://github.com/user-attachments/assets/6467eed8-b7ad-47d7-b6fa-2c5d6de79c90)
+
+![image](https://github.com/user-attachments/assets/01ece719-4ff0-44ce-9b5e-432b4c5bcc02)
+
+And this [video](https://github.com/mikelovesolivia/driving-coach/blob/main/resources/test_results.mp4) demonstrates all results on the test dataset. Most test results make sense.
+
+Even though the test results mostly seem to be good, I also apply the model to a [video](https://github.com/mikelovesolivia/driving-coach/blob/main/resources/straight_lane_detected.avi), which turns out not to work very well. This may attribute to that the aspect rations (height/width) of the video and training images vary greatly, and I simply apply the resize for the input to be processed by the model. A cropping operation may be better.
+
+To compare, I also test the deeplabv3_resnet50 model imported from torchvision.models, and it turns out to work better on the test video. It may arise from its unique structure design:
+- Multi-scale Context Aggregation: Atrous convolutions and ASPP enable efficient capture of global and local features for lanes of varying shapes and sizes.
+- High Spatial Resolution: Retains fine details with Atrous convolutions and avoids excessive downsampling.
+- Global Context Encoding: Incorporates image-level features for improved robustness in challenging scenarios.
+
+Therefore, the followings may be applied to the U-Net architecture for better performance:
+- Introduce multi-scale context by adding ASPP or atrous convolutions for better multi-scale feature extraction.
+- Preserve spatial resolution by replacing aggressive downsampling with atrous convolutions.
+- Incorporate global context and use image-level features to improve robustness in complex scenarios.
