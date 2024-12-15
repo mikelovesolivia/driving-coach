@@ -318,7 +318,9 @@ There are no ground truth labels for the test split of KITTI road dataset. There
 
 Here is a GIF to show all results on the test dataset:
 
-![image](https://github.com/user-attachments/assets/9d909da4-dbaf-4319-8fe6-e3eb4000ddda)
+![image](https://github.com/mikelovesolivia/driving-coach/blob/main/resources/test/unet/test.gif)
+
+
 
 
 
