@@ -182,6 +182,9 @@ The code for the first update is available in "project.ipynb". You can see the r
 
 #### U-Net for Lane Segmentation
 
+The model is trained on the training split of the KITTI road dataset. Only images with a lane segmentation map (95 in total) are chosen. The training split is randomly divided into 2 datasets:
+80% (76) for the training dataset and 20% (19) for the validation dataset. 
+
 To detect lanes from the images, I implemented a U-Net and trained it with image and mask pairs from the training dataset.
 
 The structure of the U-Net model is shown in the following image:
@@ -201,7 +204,8 @@ The U-Net is used in this segmentation task because:
 - Skip connections between corresponding layers in the contracting and expansive paths preserve fine-grained details and help mitigate the loss of spatial resolution during downsampling.
 - The multi-scale processing capability of U-Net allows it to capture both global context and local details, making it robust for segmenting objects of varying sizes.
 
-After 200 epochs of training, three evaluation metrics (on training set only since the test set does not contain ground truth segmentation masks) are selected: 
+
+After 20 epochs of training, three evaluation metrics (on training set only since the test set does not contain ground truth segmentation masks) are selected: 
 
 - **Dice Coefficient**:
   - The Dice Coefficient measures the overlap between the predicted lane pixels and the ground truth lane pixels.
@@ -222,47 +226,59 @@ After 200 epochs of training, three evaluation metrics (on training set only sin
 
 Evaluation metrics are displayed in the table below:
 
-| Metric                     | Value   |
-|----------------------------|---------|
-| Average Dice Coefficient   | 0.9990  |
-| Average IoU                | 0.9980  |
-| Average Pixel Accuracy     | 0.9998  |
+| Metric                     |  Train  |   Val   |
+|----------------------------|---------|---------|
+| Average Dice Coefficient   | 0.9591  | 0.9526  |
+| Average IoU                | 0.9215  | 0.9102  |
+| Average Pixel Accuracy     | 0.9935  | 0.9923  |
 
 
 
-And the AUC and PR Curves are plotted in the figures below:
+And the ROC and PR Curves are plotted in the figures below:
 
-![image](https://github.com/user-attachments/assets/e85c15b1-4c34-406f-9d8f-cb4dd9d17d84)
+Training Set:
 
-![image](https://github.com/user-attachments/assets/fccb0732-3162-49d0-b229-d4191770fb15)
+![image](https://github.com/user-attachments/assets/33a45285-f28e-4b0b-9b8f-0bc8815ea6a0)
 
-Which indicates that the model fits the training data well.
+![image](https://github.com/user-attachments/assets/1af7ee44-1351-4a34-aec5-6af94d84994f)
+
+
+Validation Set:
+
+![image](https://github.com/user-attachments/assets/b673b34a-a6d7-4f72-abf1-c666cb77328c)
+
+
+![image](https://github.com/user-attachments/assets/c78dbf6f-2723-4d4b-9715-2481a8d8a975)
+
+
+Which indicates that the model fits the training data and generalized to the validation data well.
+
+In prediction, only pixels with probability greater than 0.5 are selected as the lane segmentation. Then the segmentation results are overlaid with the original images to provide a more intuitive visualization.
 
 Below are some selected segmentation results:
 
 ##### Training set
-![image](https://github.com/user-attachments/assets/d8216767-3264-4415-a957-00e445d92d74)
+![image](https://github.com/user-attachments/assets/3347f430-6fed-4842-ae99-94562e5a9e0d)
 
-![image](https://github.com/user-attachments/assets/ca2fd6d5-81fd-4fbe-bba9-309a5a872e7b)
+![image](https://github.com/user-attachments/assets/d153a464-ba33-4a0a-b662-1c7f71ac3430)
 
-![image](https://github.com/user-attachments/assets/0440074b-82c2-4257-b594-45a9c5144644)
+![image](https://github.com/user-attachments/assets/7c727eeb-b9a4-4754-897c-20c52cf64bf3)
 
-![image](https://github.com/user-attachments/assets/9cc82f41-5763-42a1-948a-e7428051f3af)
+![image](https://github.com/user-attachments/assets/7ac2dc90-a6c0-464f-9be5-d189fab4dfdd)
 
-##### Test set
-![image](https://github.com/user-attachments/assets/9f4d1f8e-adf8-486a-abe2-97323138cb4d)
+##### Validation set
+![image](https://github.com/user-attachments/assets/daf3c471-33bc-4fc6-bd6f-38cb41a1bb32)
 
-![image](https://github.com/user-attachments/assets/899f0243-4da0-44e8-8136-5eb12715dfae)
+![image](https://github.com/user-attachments/assets/999d8a79-a921-47f6-86ae-3e96bd57a9c6)
 
-![image](https://github.com/user-attachments/assets/e69741b4-d051-41ad-8572-d40ef0dbf47f)
+![image](https://github.com/user-attachments/assets/c830750c-885b-4f67-82e5-6cee7ae0bfb1)
 
-![image](https://github.com/user-attachments/assets/6467eed8-b7ad-47d7-b6fa-2c5d6de79c90)
+![image](https://github.com/user-attachments/assets/5610b9a8-2c0c-45f4-880d-5301f793419f)
 
-![image](https://github.com/user-attachments/assets/01ece719-4ff0-44ce-9b5e-432b4c5bcc02)
 
-And this [video](https://github.com/mikelovesolivia/driving-coach/blob/main/resources/test_results.mp4) demonstrates all results on the test dataset. Most test results make sense. Some cases are not perfectly well due to light conditions and shades.
+Most test results make sense. Some cases are not perfectly well due to light conditions and shades.
 
-Even though the test results mostly seem to be good, I also apply the model to a [video](https://github.com/mikelovesolivia/driving-coach/blob/main/resources/straight_lane_detected.avi), which turns out not to work very well. This may attribute to that the aspect ratios (height/width) of the video and training images vary greatly, and I simply apply the resize for the input to be processed by the model. A cropping operation may be better.
+I also apply the model to a [video](https://github.com/mikelovesolivia/driving-coach/blob/main/resources/straight_lane_detected.avi), which turns out not to work very well. This may attribute to that the aspect ratios (height/width) of the video and training images vary greatly, and I simply apply the resize for the input to be processed by the model. A cropping operation may be better.
 
 To compare, I also test the deeplabv3_resnet50 model imported from torchvision.models, and it turns out to work better on the test video. It may arise from its unique structure design:
 - Multi-scale Context Aggregation: Atrous convolutions and ASPP enable efficient capture of global and local features for lanes of varying shapes and sizes.
@@ -274,3 +290,39 @@ Therefore, the followings may be applied to the U-Net architecture for better pe
 - Preserve spatial resolution by replacing aggressive downsampling with atrous convolutions.
 - Incorporate global context and use image-level features to improve robustness in complex scenarios.
 - Apply brightness, contrast, and gamma corrections during training to make the model robust to different light conditions.
+
+
+### Final Update
+
+### Dataset
+
+The test dataset is the test split of the KITTI road dataset. Similarities between images in training/validation and test set like the similar aspect ratio anf resolution of the image, the time when the images are taken (all during daytime; no images taken at night), and the color of the road (gray with varying light and shades) ensure that the features the model learns from the training set can be applied to the validation set. Moreover, due to the differences of each image in the dataset, including the position and the shape of the lane, the light condition, the direction of the road, the variations of the background scene, the shades on the road, etc., this division of training and validation set is effective. Such differences allow for different factors that should be considered during lane detection, sufficiently enabling the model to be evaluated for its generalization ability on the test set. Furthermore, I also picked two videos (one straight lane and the other curved lane) to test the model. Compared with the training set where the background scene mostly consists of trees and houses, the test video demonstrates a drive on the highway. Besides, different from images, video exhibits continuity and similarities across frames. These differences help assess the model's performance in a real driving setting: whether it still predicts the right lanes under different background scenes, achieves good results when lane shapes are different (straight or curved) and preserves the continuity in continuous frames.
+
+There are no ground truth labels for the test split of KITTI road dataset. Therefore, for evaluation, only qualitative results can be reported. Here are some results from the test set:
+
+![image](https://github.com/user-attachments/assets/60f3c888-7ac4-4a47-a7a1-5c6662669a9a)
+
+![image](https://github.com/user-attachments/assets/da11fe5a-7408-4d0a-a03c-0a6669c4c7a2)
+
+![image](https://github.com/user-attachments/assets/f02348fa-4a8d-4a63-adf7-11e4b3eb1ff6)
+
+![image](https://github.com/user-attachments/assets/8f90f75f-cf33-49b0-9964-66375b10264b)
+
+![image](https://github.com/user-attachments/assets/95217577-f76e-49b3-869c-062221469e55)
+
+![image](https://github.com/user-attachments/assets/cb04e395-cb7a-4489-90dc-9b64ee2a3607)
+
+![image](https://github.com/user-attachments/assets/afdcd8ab-fc22-4411-8846-d69ba4269ee2)
+
+![image](https://github.com/user-attachments/assets/6c8a3507-4eea-4966-adfb-e818588325bb)
+
+Here is a GIF to show all results on the test dataset:
+
+![image](https://github.com/user-attachments/assets/9d909da4-dbaf-4319-8fe6-e3eb4000ddda)
+
+
+
+
+
+
+
