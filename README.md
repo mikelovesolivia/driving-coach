@@ -300,21 +300,21 @@ The test dataset is the test split of the KITTI road dataset. Similarities betwe
 
 There are no ground truth labels for the test split of KITTI road dataset. Therefore, for evaluation, only qualitative results can be reported. Here are some results from the test set:
 
-![image](https://github.com/user-attachments/assets/60f3c888-7ac4-4a47-a7a1-5c6662669a9a)
+![image](https://github.com/mikelovesolivia/driving-coach/blob/main/resources/test/unet/um_000017.png)
 
-![image](https://github.com/user-attachments/assets/da11fe5a-7408-4d0a-a03c-0a6669c4c7a2)
+![image](https://github.com/mikelovesolivia/driving-coach/blob/main/resources/test/unet/um_000024.png)
 
-![image](https://github.com/user-attachments/assets/f02348fa-4a8d-4a63-adf7-11e4b3eb1ff6)
+![image](https://github.com/mikelovesolivia/driving-coach/blob/main/resources/test/unet/uu_000036.png)
 
-![image](https://github.com/user-attachments/assets/8f90f75f-cf33-49b0-9964-66375b10264b)
+![image](https://github.com/mikelovesolivia/driving-coach/blob/main/resources/test/unet/uu_000037.png)
 
-![image](https://github.com/user-attachments/assets/95217577-f76e-49b3-869c-062221469e55)
+![image](https://github.com/mikelovesolivia/driving-coach/blob/main/resources/test/unet/uu_000049.png)
 
-![image](https://github.com/user-attachments/assets/cb04e395-cb7a-4489-90dc-9b64ee2a3607)
+![image](https://github.com/mikelovesolivia/driving-coach/blob/main/resources/test/unet/uu_000050.png)
 
-![image](https://github.com/user-attachments/assets/afdcd8ab-fc22-4411-8846-d69ba4269ee2)
+![image](https://github.com/mikelovesolivia/driving-coach/blob/main/resources/test/unet/uu_000051.png)
 
-![image](https://github.com/user-attachments/assets/6c8a3507-4eea-4966-adfb-e818588325bb)
+![image](https://github.com/mikelovesolivia/driving-coach/blob/main/resources/test/unet/uu_000053.png)
 
 Here is a GIF to show all results on the test dataset:
 
