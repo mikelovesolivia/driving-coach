@@ -347,7 +347,11 @@ To improve the results, here are some proposed solutions:
 ### Running instructions:
 
 1. Download the KITTI road dataset (https://s3.eu-central-1.amazonaws.com/avg-kitti/data_road.zip), create a folder named "dataset", and place the "data_road" folder in it.
-2. Run "unet.ipynb" line by line. ("project.ipynb" is a comparison experiment that uses hough transform; you can also run it line by line for comparison.)
+2. Install the required packages by running
+```
+pip install -r requirements.txt
+```  
+3. Run "unet.ipynb" line by line. ("project.ipynb" is a comparison experiment that uses hough transform; you can also run it line by line for comparison.)
 
 
 
