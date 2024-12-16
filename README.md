@@ -352,6 +352,7 @@ To improve the results, here are some proposed solutions:
 pip install -r requirements.txt
 ```  
 3. Run "unet.ipynb" line by line. ("project.ipynb" is a comparison experiment that uses hough transform; you can also run it line by line for comparison.)
+4. If you want to use the model I trained for evaluation, uncomment "model.load_state_dict(torch.load(f"unet_epoch_20.pth"))" in the 1st line of the 7th block in "unet.ipynb".
 
 
 
