@@ -278,7 +278,7 @@ Below are some selected segmentation results:
 
 Most test results make sense. Some cases are not perfectly well due to light conditions and shades.
 
-I also apply the model to a [video](https://github.com/mikelovesolivia/driving-coach/blob/main/resources/straight_lane_detected.avi), which turns out not to work very well. This may attribute to that the aspect ratios (height/width) of the video and training images vary greatly, and I simply apply the resize for the input to be processed by the model. A cropping operation may be better.
+I also apply the model to a [video](https://github.com/mikelovesolivia/driving-coach/blob/main/resources/straight_lane_detected_notprocessed.avi), which turns out not to work very well. This may attribute to that the aspect ratios (height/width) of the video and training images vary greatly, and I simply apply the resize for the input to be processed by the model. A cropping operation may be better.
 
 To compare, I also test the deeplabv3_resnet50 model imported from torchvision.models, and it turns out to work better on the test video. It may arise from its unique structure design:
 - Multi-scale Context Aggregation: Atrous convolutions and ASPP enable efficient capture of global and local features for lanes of varying shapes and sizes.
@@ -296,30 +296,58 @@ Therefore, the followings may be applied to the U-Net architecture for better pe
 
 ### Dataset
 
-The test dataset is the test split of the KITTI road dataset. Similarities between images in training/validation and test set like the similar aspect ratio anf resolution of the image, the time when the images are taken (all during daytime; no images taken at night), and the color of the road (gray with varying light and shades) ensure that the features the model learns from the training set can be applied to the validation set. Moreover, due to the differences of each image in the dataset, including the position and the shape of the lane, the light condition, the direction of the road, the variations of the background scene, the shades on the road, etc., this division of training and validation set is effective. Such differences allow for different factors that should be considered during lane detection, sufficiently enabling the model to be evaluated for its generalization ability on the test set. Furthermore, I also picked two videos (one straight lane and the other curved lane) to test the model. Compared with the training set where the background scene mostly consists of trees and houses, the test video demonstrates a drive on the highway. Besides, different from images, video exhibits continuity and similarities across frames. These differences help assess the model's performance in a real driving setting: whether it still predicts the right lanes under different background scenes, achieves good results when lane shapes are different (straight or curved) and preserves the continuity in continuous frames.
+The test dataset is the test split of the KITTI road dataset. There are 179 images in total. Similarities between images in training/validation and test set like the similar aspect ratio anf resolution of the image, the time when the images are taken (all during daytime; no images taken at night), and the color of the road (gray with varying light and shades) ensure that the features the model learns from the training set can be applied to the validation set. Moreover, due to the differences of each image in the dataset, including the position and the shape of the lane, the light condition, the direction of the road, the variations of the background scene, the shades on the road, etc., this division of training and validation set is effective. Such differences allow for different factors that should be considered during lane detection, sufficiently enabling the model to be evaluated for its generalization ability on the test set. Furthermore, I also picked two videos (one straight lane and the other curved lane) to test the model. Compared with the training set where the background scene mostly consists of trees and houses, the test video demonstrates a drive on the highway. Besides, different from images, video exhibits continuity and similarities across frames. These differences help assess the model's performance in a real driving setting: whether it still predicts the right lanes under different background scenes, achieves good results when lane shapes are different (straight or curved) and preserves the continuity in continuous frames.
 
 There are no ground truth labels for the test split of KITTI road dataset. Therefore, for evaluation, only qualitative results can be reported. Here are some results from the test set:
 
 ![image](https://github.com/mikelovesolivia/driving-coach/blob/main/resources/test/unet/um_000017.png)
+Test Fig. 1
 
 ![image](https://github.com/mikelovesolivia/driving-coach/blob/main/resources/test/unet/um_000024.png)
+Test Fig. 2
 
 ![image](https://github.com/mikelovesolivia/driving-coach/blob/main/resources/test/unet/uu_000036.png)
+Test Fig. 3
 
 ![image](https://github.com/mikelovesolivia/driving-coach/blob/main/resources/test/unet/uu_000037.png)
+Test Fig. 4
 
 ![image](https://github.com/mikelovesolivia/driving-coach/blob/main/resources/test/unet/uu_000049.png)
+Test Fig. 5
 
 ![image](https://github.com/mikelovesolivia/driving-coach/blob/main/resources/test/unet/uu_000050.png)
+Test Fig. 6
 
 ![image](https://github.com/mikelovesolivia/driving-coach/blob/main/resources/test/unet/uu_000051.png)
+Test Fig. 7
 
 ![image](https://github.com/mikelovesolivia/driving-coach/blob/main/resources/test/unet/uu_000053.png)
+Test Fig. 8
 
 Here is a GIF to show all results on the test dataset:
 
 ![image](https://github.com/mikelovesolivia/driving-coach/blob/main/resources/test/unet/test.gif)
 
+Most results seem reasonable on the test set. However, there are some less satisfying results. For example, in Test Fig. 3, 4 and 7, the segmentation covers too little area. This may be due to that there are no white lane lines guiding the model to locate at the right place. Besides, in Test Fig. 8, the car's color is closer to the gray roads in the training samples, misleading the model to recognize it as the lane. 
+
+Also, I tested the model on two videos, one [straight lane](https://github.com/mikelovesolivia/driving-coach/blob/main/straight_lane.mp4) and the other [curved lane](https://github.com/mikelovesolivia/driving-coach/blob/main/curved_lane.mp4). Based on the insight from the last update, I made a comparison of [1] directly inputting the resized frame to the model and [2] cropping the frame to the similar aspect ratio as the training images, then resizing the frame and inputting to the model. While Method [1] shows bad results with distorted lane shape with several broken areas, Method [2] demonstrates much better results. This shows that the aspect ratio is also an important factor that affects the model performance: inconsistent aspect ratio introduces distortions and noises in the segmentation results. Besides, the model predicts better lane segmentations on straight lanes than curved lanes, which may be attributable to that (1) the training set contain more straight lane samples; (2) straight lane is more regular than curved lane, therefore easier to segment. Overall, the model also produces good qualitative results on the test video, showcasing its generalization ability on continuous frames with background scenes different to the training setting. Below are the links to the videos:
+
+|               |  Method [1]  |  Method [2]  | Ground Truth |
+|---------------|--------------|--------------|--------------|
+| Curved Lane   | [video](https://github.com/mikelovesolivia/driving-coach/blob/main/resources/curved_lane_detected_notprocessed.avi)  | [video](https://github.com/mikelovesolivia/driving-coach/blob/main/resources/curved_lane_detected_processed.avi)  | [video](https://github.com/mikelovesolivia/driving-coach/blob/main/curved_lane.mp4)  |
+| Straight Lane | [video](https://github.com/mikelovesolivia/driving-coach/blob/main/resources/straight_lane_detected_processed.avi)    | [video](https://github.com/mikelovesolivia/driving-coach/blob/main/resources/straight_lane_detected_notprocessed.avi)  |  [video](https://github.com/mikelovesolivia/driving-coach/blob/main/straight_lane.mp4) |
+
+To improve the results, here are some proposed solutions:
+
+- **Use more traning samples.** KITTI dataset contains only small number of labeld images, which are too little to train a powerful model to generalize to more complicated settings. Use a larger dataset for training can help improve the performance.
+-  **Employ data augmentation.** Test results show that factors like light and color can misguide the model. Image augmentation methods, like color jitter, gray scaling, gamma correction, histogram equalization can be used to prevent the model from overly depending on such misguiding factors. Besides, with the aforementioned image augmentation methods and affine transforms, more image-label pairs for training can be generated, expanding the training dataset.
+-  **Integration with other methods.** We can also guide the model with some prior knowledge extracted by some other methods, like hough transform, RANSAC, etc., to constrain the model's focus on places where there might be lanes, therefore improving the performance.
+-  **More powerful models** More powerful models, like Vision Transformers, YOLO, etc. may generate better results.
+
+### Running instructions:
+
+1. Download the KITTI road dataset (https://s3.eu-central-1.amazonaws.com/avg-kitti/data_road.zip), create a folder named "dataset", and place the "data_road" folder in it.
+2. Run "unet.ipynb" line by line. ("project.ipynb" is a comparison experiment that uses hough transform; you can also run it line by line for comparison.)
 
 
 
