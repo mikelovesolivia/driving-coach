@@ -356,7 +356,13 @@ You can find my slide in this [link](https://docs.google.com/presentation/d/17zt
 pip install -r requirements.txt
 ```  
 3. Run "unet.ipynb" line by line. ("project.ipynb" is a comparison experiment that uses hough transform; you can also run it line by line for comparison.)
-4. If you want to use the model I trained for evaluation, uncomment "model.load_state_dict(torch.load(f"unet_epoch_20.pth"))" in the 1st line of the 7th block in "unet.ipynb".
+4. Following results will be generated:
+   - train_results: this folder contains all results on the training dataset
+   - val_results: this folder contains all results on the validation dataset
+   - test_results: this folder contains all results on the test dataset
+   - test.gif: a gif image showing all results on the test dataset for an intuitive and convenient visualization
+   - curved_lane_detected_processed.avi: the detection result on a video which shows a car driving on a road with curved lanes, created by Method [2] mentioned in the final update.
+6. If you want to use the model I trained for evaluation, uncomment "model.load_state_dict(torch.load(f"unet_epoch_20.pth"))" in the 1st line of the 7th block in "unet.ipynb".
 
 
 
