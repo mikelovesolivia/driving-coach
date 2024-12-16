@@ -344,9 +344,13 @@ To improve the results, here are some proposed solutions:
 -  **Integration with other methods.** We can also guide the model with some prior knowledge extracted by some other methods, like hough transform, RANSAC, etc., to constrain the model's focus on places where there might be lanes, therefore improving the performance.
 -  **More powerful models** More powerful models, like Vision Transformers, YOLO, etc. may generate better results.
 
+### Presentation Slide
+
+You can find my slide in this [link](https://docs.google.com/presentation/d/17ztJfamhMHe-j9Yk8N3kGRjkXg4tZRlNP_dlqvxtAG0/edit#slide=id.p1).
+
 ### Running instructions:
 
-1. Download the KITTI road dataset (https://s3.eu-central-1.amazonaws.com/avg-kitti/data_road.zip), create a folder named "dataset", and place the "data_road" folder in it.
+1. Download the [KITTI road dataset](https://s3.eu-central-1.amazonaws.com/avg-kitti/data_road.zip), create a folder named "dataset", and place the "data_road" folder in it.
 2. Install the required packages by running
 ```
 pip install -r requirements.txt
