@@ -238,9 +238,9 @@ And the ROC and PR Curves are plotted in the figures below:
 
 Training Set:
 
-![image](https://github.com/user-attachments/assets/33a45285-f28e-4b0b-9b8f-0bc8815ea6a0)
+![image](https://github.com/mikelovesolivia/driving-coach/blob/main/resources/roc_train.png)
 
-![image](https://github.com/user-attachments/assets/1af7ee44-1351-4a34-aec5-6af94d84994f)
+![image](https://github.com/mikelovesolivia/driving-coach/blob/main/resources/pr_train.png)
 
 
 Validation Set:
